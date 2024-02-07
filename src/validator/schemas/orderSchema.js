@@ -1,0 +1,32 @@
+const Joi = require("joi");
+const { LaminationType, PaymentType, OrderStatus } = require("../../config/constant");
+
+const createOrder = Joi.object({
+    customer_uuid: Joi.string(),
+    work_description: Joi.string(),
+    size_page: Joi.string(),
+    unit_pieces: Joi.number(),
+    paper_description: Joi.number(),
+    rim_sheet: Joi.string(),
+    plate_ctp_description: Joi.string(),
+    ink_description: Joi.string(),
+    binding_numbering: Joi.string(),
+    hot_lamination: Joi.string().valid(...Object.values(LaminationType)),
+    normal_lamination: Joi.string().valid(...Object.values(LaminationType)),
+    machine_type: Joi.string().valid(...Object.values(LaminationType)),
+    unit_price: Joi.number(),
+    total_price: Joi.number(),
+    advanced_payment: Joi.string(),
+    due_payment: Joi.string(),
+    total_payment: Joi.string(),
+    delivery_date: Joi.date(),
+    remarks: Joi.date(),
+    payment_status: Joi.string().valid(...Object.values(PaymentType)),
+    order_status: Joi.string().valid(...Object.values(OrderStatus)),
+    due_payment_date: Joi.date(),
+    order_delivery_date: Joi.date(),
+});
+
+module.exports = {
+    createOrder,
+}
