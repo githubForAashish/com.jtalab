@@ -80,9 +80,10 @@ class AuthService {
         if (!refreshTokenDoc) {
             return false;
         }
-        await this.tokenService.removeAuthTokens(req.body);
-        await this.redisService.removeToken(req.body.accessToken, TokenTypes.ACCESS);
-        await this.redisService.removeToken(req.body.refreshToken, TokenTypes.REFRESH);
+        const accessTokenDoc = await this.tokenService.getAccessTokenByUserUuid(refreshTokenDoc.user_uuid);
+        await this.tokenService.removeAuthTokens(refreshTokenDoc.user_uuid);
+        await this.redisService.removeToken(accessTokenDoc.token, TokenTypes.ACCESS);
+        await this.redisService.removeToken(refreshTokenDoc.token, TokenTypes.REFRESH);
         return true;
     };
 }

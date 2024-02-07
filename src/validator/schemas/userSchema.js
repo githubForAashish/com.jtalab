@@ -23,7 +23,7 @@ const changePassword = Joi.object({
 });
 
 const refreshToken = Joi.object({
-    refreshToken: Joi.string().required(),
+    refresh_token: Joi.string().required(),
 });
 
 const verificationToken = Joi.object({

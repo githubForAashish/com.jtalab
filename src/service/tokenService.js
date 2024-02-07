@@ -41,22 +41,22 @@ class TokenService {
         });
     };
 
-    removeAuthTokens = async ({ refreshToken, accessToken }) => {
+    getAccessTokenByUserUuid = async (userUuid) => {
+        return this.tokenDao.findOne({
+            user_uuid: userUuid,
+            type: TokenTypes.REFRESH,
+            blacklisted: false,
+        })
+    }
+
+    removeAuthTokens = async (userUuid) => {
         await this.tokenDao.remove({
-            token: refreshToken,
+            user_uuid: userUuid,
             type: TokenTypes.REFRESH,
             blacklisted: false,
         });
         await this.tokenDao.remove({
-            token: accessToken,
-            type: TokenTypes.ACCESS,
-            blacklisted: false,
-        });
-    };
-
-    removeAccessToken = async (token) => {
-        return this.tokenDao.remove({
-            token,
+            user_uuid: userUuid,
             type: TokenTypes.ACCESS,
             blacklisted: false,
         });
@@ -65,7 +65,7 @@ class TokenService {
     verifyToken = async (token, type) => {
         const payload = await jwt.verify(token, config.jwt.secret, (err, decoded) => {
             if (err) {
-                throw new AuthorizationError(httpStatus.UNPROCESSABLE_ENTITY, 'Provide valid access_token');
+                throw new AuthorizationError(httpStatus.UNPROCESSABLE_ENTITY, 'Token Invalid');
             } else {
                 // if everything is good, save to request for use in other routes
                 return decoded;
@@ -78,7 +78,7 @@ class TokenService {
             blacklisted: false,
         });
         if (!tokenDoc) {
-            throw new AuthorizationError(httpStatus.NOT_FOUND, 'access_token has been expired.');
+            throw new AuthorizationError(httpStatus.NOT_FOUND, 'Tokens have expired');
         }
         return tokenDoc;
     };

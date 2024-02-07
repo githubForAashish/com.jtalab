@@ -78,8 +78,7 @@ class UsersAndTokensController {
     };
 
     logout = async (req, res) => {
-        await this.authService.logout(req, res);
-        res.status(httpStatus.NO_CONTENT).send();
+        res.status(httpStatus.NO_CONTENT).send(await this.authService.logout(req, res));
     };
 
     refreshTokens = async (req, res) => {
