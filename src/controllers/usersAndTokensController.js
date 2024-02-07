@@ -70,7 +70,7 @@ class UsersAndTokensController {
             if (user.response.status) {
                 tokens = await this.tokenService.generateAuthTokens(data);
             }
-            res.status(user.statusCode).send({ status, code, message, data, ...(tokens ?? {tokens}) });
+            res.status(user.statusCode).send({ status, code, message, data, ...(tokens ?? { tokens }) });
         } catch (e) {
             logger.error(e);
             res.status(httpStatus.BAD_GATEWAY).send(e);
@@ -94,7 +94,7 @@ class UsersAndTokensController {
             }
             await this.tokenService.removeTokenById(refreshTokenDoc.id);
             const tokens = await this.tokenService.generateAuthTokens(user);
-            res.send(tokens);
+            res.status(httpStatus.OK).send(tokens);
         } catch (e) {
             logger.error(e);
             res.status(e.statusCode || httpStatus.INTERNAL_SERVER_ERROR).send(e.message || 'Something went wrong. Please report your admin.');
@@ -132,9 +132,9 @@ class UsersAndTokensController {
 
     confirmResetPassword = async (req, res) => {
         try {
-            const { token } = req.body;
-            const user = await this.authService.completeResetPassword(token);
-            res.status(httpStatus.OK).send(user);
+            const { token, password } = req.body;
+            const { statusCode, response } = await this.authService.completeResetPassword(token, password);
+            res.status(statusCode).send(response.message);
         } catch (e) {
             logger.error(e);
             res.status(httpStatus.BAD_GATEWAY).send('Password update failed for the user.');

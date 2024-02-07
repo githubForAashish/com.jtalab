@@ -67,18 +67,12 @@ class AuthService {
         await this.tokenService.removeTokenById(verifyEmailTokenDoc.id);
     };
 
-    completeResetPassword = async (token) => {
+    completeResetPassword = async (token, newPassword) => {
         const verifyResetPasswordDoc = await this.tokenService.verifyToken(
             token,
             TokenTypes.RESET_PASSWORD,
         );
-        const user = await this.userService.getUserByUuid(verifyResetPasswordDoc.user_uuid);
-        if (!user) {
-            throw new ApiError(httpStatus.NOT_FOUND, 'User not found. Password update failed.');
-        }
-        const { id, password, ...cleanedUser } = user.toJSON();
-        await this.tokenService.removeTokenById(verifyResetPasswordDoc.id);
-        return cleanedUser;
+        return this.userService.confirmForgotPassword(verifyResetPasswordDoc.user_uuid, newPassword);
     };
 
     logout = async (req) => {

@@ -19,8 +19,8 @@ const checkEmail = Joi.object({
 
 const changePassword = Joi.object({
     old_password: Joi.string().required(),
-    password: Joi.string().min(6).required(),
-    confirm_password: Joi.string().min(6).required(),
+    password: Joi.string().min(8).required(),
+    confirm_password: Joi.string().min(8).required(),
 });
 
 const refreshToken = Joi.object({
@@ -31,6 +31,11 @@ const verificationToken = Joi.object({
     token: Joi.string().required(),
 });
 
+const confirmForgotPassword = Joi.object({
+    token: Joi.string().required(),
+    password: Joi.string().min(8).required(),
+});
+
 module.exports = {
     createUser,
     userLogin,
@@ -38,4 +43,5 @@ module.exports = {
     changePassword,
     refreshToken,
     verificationToken,
+    confirmForgotPassword,
 };

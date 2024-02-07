@@ -11,6 +11,7 @@ const {
     changePassword,
     refreshToken,
     verificationToken,
+    confirmForgotPassword,
 } = require('../validator/schemas/userSchema');
 const isAuthorized = require('../middlewares/authorization');
 const { UserRoles } = require('../config/role');
@@ -199,18 +200,18 @@ router.post('/forgot-password', authController.resetPassword);
  *     tags:
  *       - Users and Tokens
  *     requestBody:
- *       description: URL Token receivied in Email
+ *       description: New Password along with token received in email confirmation
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/verificationToken'
+ *             $ref: '#/components/schemas/confirmForgotPassword'
  *     responses:
  *       xxx:
  *         $ref: '#/components/responses/xxx'
  *
  */
-router.post('/forgot-password-confirmed', authController.confirmResetPassword);
+router.post('/forgot-password-confirmed', validator(confirmForgotPassword), authController.confirmResetPassword);
 
 /**
  * @swagger

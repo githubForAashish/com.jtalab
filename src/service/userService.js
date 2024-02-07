@@ -135,6 +135,22 @@ class UserService {
 
         return responseHandler.returnError(httpStatus.BAD_REQUEST, 'Password Update Failed!');
     };
+
+    confirmForgotPassword = async (uuid, newPassword) => {
+        const updateUser = await this.userDao.updateWhere(
+            { password: bcrypt.hashSync(newPassword, 8) },
+            { uuid },
+        );
+
+        if (updateUser) {
+            return responseHandler.returnSuccess(
+                httpStatus.OK,
+                'Password updated Successfully. Please re-login',
+            );
+        }
+
+        return responseHandler.returnError(httpStatus.BAD_REQUEST, 'Password Update Failed!');
+    };
 }
 
 module.exports = UserService;

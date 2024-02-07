@@ -30,12 +30,11 @@ const verifyCallback = async (req, payload, done) => {
         if (!tokenDoc) {
             console.log('Cache Missed!');
 
-            // // TODO: REMOVE ACCESS TOKEN STORAGE IN DB (ONLY STORE REFRESH TOKEN IN DB)
-            // tokenDoc = await tokenDao.findOne({
-            //     token: authorization[1],
-            //     type: TokenTypes.ACCESS,
-            //     blacklisted: false,
-            // });
+            tokenDoc = await tokenDao.findOne({
+                token: authorization[1],
+                type: TokenTypes.ACCESS,
+                blacklisted: false,
+            });
         }
 
         if (!tokenDoc) {
