@@ -35,7 +35,7 @@ router.post('/register', isAuthenticated(), isAuthorized(UserRoles.ADMIN, UserRo
 /**
  * @swagger
  * /orders/{customerUUID}:
- *   post:
+ *   get:
  *     summary: Fetch all orders for a customer by the customer_uuid
  *     tags:
  *       - Orders

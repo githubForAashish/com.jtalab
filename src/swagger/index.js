@@ -40,11 +40,10 @@ const swaggerOptions = {
             },
             securitySchemes: {
                 apiKey: {
-                    type: 'apiKey',
-                    in: 'header',
+                    type: 'http',
                     scheme: 'bearer',
                     bearerFormat: 'JWT',
-                    description: 'Provide the API Key in format "Bearer `apiKey>"'
+                    description: 'Provide the API Key'
                 },
             },
             schemas: schemaDefinitions,
