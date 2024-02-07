@@ -23,9 +23,19 @@ const changePassword = Joi.object({
     confirm_password: Joi.string().min(6).required(),
 });
 
+const refreshToken = Joi.object({
+    refreshToken: Joi.string().required(),
+});
+
+const verificationToken = Joi.object({
+    token: Joi.string().required(),
+});
+
 module.exports = {
     createUser,
     userLogin,
     checkEmail,
     changePassword,
+    refreshToken,
+    verificationToken,
 };

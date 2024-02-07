@@ -28,8 +28,8 @@ class AuthService {
             let user = await this.userService.getUserByEmail(email);
             if (user == null) {
                 return responseHandler.returnError(
-                    httpStatus.BAD_REQUEST,
-                    'Invalid Email Address!',
+                    httpStatus.NOT_FOUND,
+                    'User not found.',
                 );
             }
             const isPasswordValid = await bcrypt.compare(password, user.password);

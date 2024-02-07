@@ -49,6 +49,19 @@ class UserService {
         }
     };
 
+    removeUser = async (uuid) => {
+        try {
+            const updated = await this.userDao.deleteByUuid(uuid);
+            if (!updated) {
+                return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not delete the customer. UUID: ${uuid}`);
+            }
+            return responseHandler.returnSuccess(httpStatus.NO_CONTENT, `User UUID: ${uuid} has been deleted.`);
+        } catch (e) {
+            logger.error(e);
+            return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not delete the customer. UUID: ${uuid}`);
+        }
+    }
+
     /**
      * Confirm email verification for a user
      * @param {Object} user

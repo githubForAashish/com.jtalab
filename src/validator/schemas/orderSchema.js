@@ -1,8 +1,7 @@
 const Joi = require("joi");
 const { LaminationType, PaymentType, OrderStatus } = require("../../config/constant");
 
-const createOrder = Joi.object({
-    customer_uuid: Joi.string(),
+const baseOrderSchema = Object.freeze({
     work_description: Joi.string(),
     size_page: Joi.string(),
     unit_pieces: Joi.number(),
@@ -27,6 +26,14 @@ const createOrder = Joi.object({
     order_delivery_date: Joi.date(),
 });
 
+const createOrder = Joi.object({
+    customer_uuid: Joi.string().required(),
+    ...baseOrderSchema,
+});
+
+const updateOrder = Joi.object(baseOrderSchema);
+
 module.exports = {
     createOrder,
+    updateOrder,
 }

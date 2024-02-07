@@ -6,6 +6,9 @@ const routes = require('./route');
 const { jwtStrategy } = require('./config/passport');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./errors/apiError');
+const swaggerUi = require('swagger-ui-express');
+const { swaggerOptions } = require('./swagger');
+const swaggerJSDoc = require('swagger-jsdoc');
 
 process.env.PWD = process.cwd();
 
@@ -20,12 +23,15 @@ app.use(express.static(`${process.env.PWD}/public`));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// initiate swagger
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerOptions)));
+
 // jwt authentication
 app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);
 
 app.get('/api', async (req, res) => {
-    res.status(200).send('Congratulations! API is working!');
+    res.redirect('/api/docs');
 });
 app.use('/api', routes);
 

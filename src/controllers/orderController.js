@@ -30,7 +30,7 @@ class OrderController {
 
     list = async (req, res) => {
         try {
-            const orders = await this.orderService.listOrder(req.params.customer_uuid);
+            const orders = await this.orderService.listOrder(req.params.customerUUID);
             const { status, message, data } = orders.response;
             res.status(orders.statusCode).send({ status, message, data });
         } catch (e) {
@@ -39,10 +39,10 @@ class OrderController {
         }
     }
 
-    delete = async (req, res) => {
+    remove = async (req, res) => {
         try {
-            await this.orderService.removeOrder(req.params.uuid);
-            res.status(httpStatus.OK).send(`Successfully removed order UUID: ${req.params.uuid}`);
+            const { response } = await this.orderService.removeOrder(req.params.uuid);
+            res.status(response.code).send(response.message);
         } catch (e) {
             logger.error(e);
             res.status(httpStatus.BAD_GATEWAY).send(e);

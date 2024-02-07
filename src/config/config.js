@@ -6,6 +6,7 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const envValidation = Joi.object()
     .keys({
+        DOMAIN_NAME: Joi.string().default('localhost'),
         NODE_ENV: Joi.string().valid('development', 'production', 'test').required(),
         PORT: Joi.number().default(3000),
         DB_HOST: Joi.string().default('localhost'),
@@ -82,4 +83,7 @@ module.exports = {
         verifyEmailClientWebhook: envVar.CLIENT_EMAIL_VERIFICATION_WEBHOOK,
         resetPasswordClientWebhook: envVar.CLIENT_RESET_PASSWORD_WEBHOOK,
     },
+    swagger: {
+        server: (['development', 'test'].includes(envVar.NODE_ENV) ? `http://localhost:${envVar.PORT}` : `https://${envVar.DOMAIN_NAME}`),
+    }
 };

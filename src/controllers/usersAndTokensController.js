@@ -8,7 +8,7 @@ const EmailHelper = require('../helper/emailHelper');
 const { returnSuccess } = require('../helper/responseHandler');
 const ApiError = require('../errors/apiError');
 
-class AuthController {
+class UsersAndTokensController {
     constructor() {
         this.userService = new UserService();
         this.tokenService = new TokenService();
@@ -37,6 +37,16 @@ class AuthController {
         }
     };
 
+    remove = async (req, res) => {
+        try {
+            const { response } = await this.userService.removeUser(req.params.uuid);
+            res.status(response.code).send(response.message);
+        } catch (e) {
+            logger.error(e);
+            res.status(httpStatus.BAD_GATEWAY).send(e);
+        }
+    }
+
     checkEmail = async (req, res) => {
         try {
             const isExists = await this.userService.isEmailExists(req.body.email.toLowerCase());
@@ -60,7 +70,7 @@ class AuthController {
             if (user.response.status) {
                 tokens = await this.tokenService.generateAuthTokens(data);
             }
-            res.status(user.statusCode).send({ status, code, message, data, tokens });
+            res.status(user.statusCode).send({ status, code, message, data, ...(tokens ?? {tokens}) });
         } catch (e) {
             logger.error(e);
             res.status(httpStatus.BAD_GATEWAY).send(e);
@@ -87,7 +97,7 @@ class AuthController {
             res.send(tokens);
         } catch (e) {
             logger.error(e);
-            res.status(httpStatus.BAD_GATEWAY).send(e);
+            res.status(e.statusCode || httpStatus.INTERNAL_SERVER_ERROR).send(e.message || 'Something went wrong. Please report your admin.');
         }
     };
 
@@ -142,4 +152,4 @@ class AuthController {
     };
 }
 
-module.exports = AuthController;
+module.exports = UsersAndTokensController;

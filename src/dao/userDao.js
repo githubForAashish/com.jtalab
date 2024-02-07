@@ -31,6 +31,11 @@ class UserDao extends SuperDao {
     async createWithTransaction(user, transaction) {
         return this.Model.create(user, { transaction });
     }
+
+    async deleteByUuid(uuid) {
+        return this.updateWhere({ status: UserStatus.DISABLED }, { uuid });
+    }
+
 }
 
 module.exports = UserDao;

@@ -5,6 +5,8 @@ const config = require('../config/config');
 const { TokenTypes } = require('../config/tokens');
 const TokenDao = require('../dao/tokenDao');
 const RedisService = require('./redisService');
+const AuthorizationError = require('../errors/authorizationError');
+const httpStatus = require('http-status');
 
 class TokenService {
     constructor() {
@@ -63,13 +65,12 @@ class TokenService {
     verifyToken = async (token, type) => {
         const payload = await jwt.verify(token, config.jwt.secret, (err, decoded) => {
             if (err) {
-                throw new Error('Token not found');
+                throw new AuthorizationError(httpStatus.UNPROCESSABLE_ENTITY, 'Provide valid access_token');
             } else {
                 // if everything is good, save to request for use in other routes
                 return decoded;
             }
         });
-
         const tokenDoc = await this.tokenDao.findOne({
             token,
             type,
@@ -77,7 +78,7 @@ class TokenService {
             blacklisted: false,
         });
         if (!tokenDoc) {
-            throw new Error('Token not found');
+            throw new AuthorizationError(httpStatus.NOT_FOUND, 'access_token has been expired.');
         }
         return tokenDoc;
     };
