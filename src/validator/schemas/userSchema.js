@@ -18,9 +18,8 @@ const checkEmail = Joi.object({
 });
 
 const changePassword = Joi.object({
-    old_password: Joi.string().required(),
-    password: Joi.string().min(8).required(),
-    confirm_password: Joi.string().min(8).required(),
+    old_password: Joi.string().min(8).required(),
+    new_password: Joi.string().min(8).required(),
 });
 
 const refreshToken = Joi.object({
