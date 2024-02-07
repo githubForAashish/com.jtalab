@@ -1,5 +1,7 @@
 const { http } = require("winston");
 const OrderService = require("../service/orderService");
+const logger = require("../config/logger");
+const httpStatus = require("http-status");
 
 class OrderController {
     constructor() {
@@ -19,7 +21,7 @@ class OrderController {
 
     update = async (req, res) => {
         try {
-            const order = await this.customerService.updateCustomer(req.body, req.params.uuid);
+            const order = await this.orderService.updateOrder(req.body, req.params.uuid);
             const { status, message } = order.response;
             res.status(order.statusCode).send({ status, message });
         } catch (e) {

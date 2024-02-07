@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { LaminationType, PaymentType, OrderStatus } = require("../../config/constant");
+const { LaminationType, PaymentType, OrderStatus, MachineType } = require("../../config/constant");
 
 const baseOrderSchema = Object.freeze({
     work_description: Joi.string(),
@@ -12,14 +12,14 @@ const baseOrderSchema = Object.freeze({
     binding_numbering: Joi.string(),
     hot_lamination: Joi.string().valid(...Object.values(LaminationType)),
     normal_lamination: Joi.string().valid(...Object.values(LaminationType)),
-    machine_type: Joi.string().valid(...Object.values(LaminationType)),
+    machine_type: Joi.string().valid(...Object.values(MachineType)),
     unit_price: Joi.number(),
     total_price: Joi.number(),
     advanced_payment: Joi.string(),
     due_payment: Joi.string(),
     total_payment: Joi.string(),
     delivery_date: Joi.date(),
-    remarks: Joi.date(),
+    remarks: Joi.string(),
     payment_status: Joi.string().valid(...Object.values(PaymentType)),
     order_status: Joi.string().valid(...Object.values(OrderStatus)),
     due_payment_date: Joi.date(),

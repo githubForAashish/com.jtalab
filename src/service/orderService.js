@@ -1,6 +1,9 @@
+const httpStatus = require("http-status");
 const { OrderStatus } = require("../config/constant");
+const logger = require("../config/logger");
 const OrderDao = require("../dao/orderDao");
 const responseHandler = require('../helper/responseHandler');
+const { Op } = require("sequelize");
 
 class OrderService {
     constructor() {
@@ -16,7 +19,7 @@ class OrderService {
 
             if (!orderData) {
                 message = 'Order placement failed!';
-                return responseHandler.returnError(httpStatus.SERVICE_UNAVAILABLE, message, orde);
+                return responseHandler.returnError(httpStatus.SERVICE_UNAVAILABLE, message);
             }
 
             orderData = orderData.toJSON();
@@ -48,7 +51,7 @@ class OrderService {
         try {
             const updated = await this.orderDao.deleteByUuid(uuid);
             if (!updated) {
-                return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not dlete the Order. UUID: ${uuid}`);
+                return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not delete the Order. UUID: ${uuid}`);
             }
             return responseHandler.returnSuccess(httpStatus.NO_CONTENT, `Order UUID: ${uuid} has been deleted.`);
         } catch (e) {
@@ -59,10 +62,7 @@ class OrderService {
 
     listOrder = async (customer_uuid) => {
         try {
-            const orders = await this.orderDao.findByWhere({ status: { [Op.ne]: OrderStatus.CANCELED }, customer_uuid }, { exclude: ['id'] });
-            if (!orders) {
-                return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not fetch orders.`)
-            }
+            const orders = await this.orderDao.findByWhere({ order_status: { [Op.ne]: OrderStatus.CANCELED }, customer_uuid }, { exclude: ['id'] });
             return responseHandler.returnSuccess(httpStatus.OK, `Available Orders for customer uuid: ${customer_uuid}`, orders.map((order) => order.toJSON()));
         } catch (e) {
             logger.error(e);
@@ -72,14 +72,14 @@ class OrderService {
 
     getOrder = async (uuid) => {
         try {
-            const order = await this.orderDao.findOneByWhere({ uuid, status: { [Op.ne]: OrderStatus.CANCELED } }, { exclude: ['id'] });
+            const order = await this.orderDao.findOneByWhere({ uuid, order_status: { [Op.ne]: OrderStatus.CANCELED } }, { exclude: ['id'] });
             if (!order) {
                 return responseHandler.returnError(httpStatus.NOT_FOUND, `The order does not exist.`);
             }
-            return responseHandler.returnSuccess(httpStatus.OK, `Customer`, customer.toJSON());
+            return responseHandler.returnSuccess(httpStatus.OK, `Order found.`, order.toJSON());
         } catch (e) {
             logger.error(e);
-            return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not fetch orders from customer UUID: ${uuid}`);
+            return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not fetch order UUID: ${uuid}`);
         }
     }
 }

@@ -8,7 +8,7 @@ class OrderDao extends SuperDao {
     }
 
     async deleteByUuid(uuid) {
-        return this.updateWhere({ status: OrderStatus.CANCELED }, { uuid });
+        return this.updateWhere({ order_status: OrderStatus.CANCELED }, { uuid });
     }
     
 }
