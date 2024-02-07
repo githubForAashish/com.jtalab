@@ -26,7 +26,6 @@ module.exports = {
         password: config.dbPass,
         database: config.dbName,
         host: config.dbHost,
-        port: config.port,
         dialect: 'mysql',
         dialectOptions: {
             bigNumberStrings: true,
