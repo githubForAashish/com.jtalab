@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const { UserRoles } = require('../../config/role');
+const { UserStatus } = require('../../config/constant');
 
 const createUser = Joi.object({
     email: Joi.string().email().required(),
@@ -7,6 +8,12 @@ const createUser = Joi.object({
     name: Joi.string(),
     role: Joi.string().valid(...Object.values(UserRoles)).default(UserRoles.STAFF),
 });
+
+const updateUser = Joi.object({
+    name: Joi.string(),
+    role: Joi.string().valid(...Object.values(UserRoles)),
+    status: Joi.string().valid(...Object.values(UserStatus)),
+})
 
 const userLogin = Joi.object({
     email: Joi.string().email().required(),
@@ -43,4 +50,5 @@ module.exports = {
     refreshToken,
     verificationToken,
     confirmForgotPassword,
+    updateUser,
 };

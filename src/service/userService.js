@@ -49,16 +49,43 @@ class UserService {
         }
     };
 
+    listUsers = async () => {
+        try {
+            const users = await this.userDao.findByWhere({ status: UserStatus.ENABLED, }, { exclude: ['id', 'password'] });
+            if (!users) {
+                throw new Error();
+            }
+            return responseHandler.returnSuccess(httpStatus.OK, 'Available users', users.map((customer) => customer.toJSON()));
+        } catch (e) {
+            logger.error(e);
+            return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not fetch users`)
+        }
+    }
+
+    updateUser = async (userBody, uuid) => {
+        let message = 'Successfully updated user.'
+        try {
+            if (!await this.userDao.updateWhere(userBody, { uuid })) {
+                message = 'User Update Failed!';
+                return responseHandler.returnError(httpStatus.SERVICE_UNAVAILABLE, message);
+            }
+            return responseHandler.returnSuccess(httpStatus.OK, message);
+        } catch (e) {
+            logger.error(e);
+            return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, 'Could not update the user.');
+        }
+    }
+
     removeUser = async (uuid) => {
         try {
             const updated = await this.userDao.deleteByUuid(uuid);
             if (!updated) {
-                return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not delete the customer. UUID: ${uuid}`);
+                return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not delete the user. UUID: ${uuid}`);
             }
             return responseHandler.returnSuccess(httpStatus.NO_CONTENT, `User UUID: ${uuid} has been deleted.`);
         } catch (e) {
             logger.error(e);
-            return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not delete the customer. UUID: ${uuid}`);
+            return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not delete the user. UUID: ${uuid}`);
         }
     }
 

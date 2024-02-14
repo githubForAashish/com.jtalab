@@ -12,6 +12,7 @@ const {
     refreshToken,
     verificationToken,
     confirmForgotPassword,
+    updateUser,
 } = require('../validator/schemas/userSchema');
 const isAuthorized = require('../middlewares/authorization');
 const { UserRoles } = require('../config/role');
@@ -42,6 +43,51 @@ const authController = new AuthController();
  */
 router.post('/register', isAuthenticated(), isAuthorized(UserRoles.ADMIN), validator(createUser), authController.register);
 
+/**
+ * @swagger
+ * /usersAndTokens/users:
+ *   get:
+ *     summary: Fetch all users
+ *     description: Fetch all active users
+ *     tags:
+ *       - Users and Tokens
+ *     security:
+ *       - apiKey: []
+ *     responses:
+ *       xxx:
+ *         $ref: '#/components/responses/xxx'
+ *
+ */
+router.get('/users', isAuthenticated(), isAuthenticated(UserRoles.ADMIN, UserRoles.STAFF), authController.list);
+
+
+/**
+ * @swagger
+ * /usersAndTokens/{uuid}:
+ *   patch:
+ *     summary: Update an existing user
+ *     tags:
+ *       - Users and Tokens
+ *     parameters:
+ *       - in: path
+ *         name: uuid
+ *         schema:
+ *           type: uuid
+ *     security:
+ *       - apiKey: []
+ *     requestBody:
+ *       description: User info to update
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/updateUser'
+ *     responses:
+ *       xxx:
+ *         $ref: '#/components/responses/xxx'
+ *
+ */
+router.patch('/:uuid', isAuthenticated(), isAuthorized(UserRoles.ADMIN), validator(updateUser), authController.update);
 
 /**
  * @swagger

@@ -37,6 +37,28 @@ class UsersAndTokensController {
         }
     };
 
+    list = async (req, res) => {
+        try {
+            const users = await this.userService.listUsers();
+            const { message, data } = users.response;
+            res.status(users.statusCode).send({ message, data });
+        } catch (e) {
+            logger.error(e);
+            res.status(httpStatus.BAD_GATEWAY).send(e);
+        }
+    }
+
+    update = async (req, res) => {
+        try {
+            const user = await this.userService.updateUser(req.body, req.params.uuid);
+            const { status, message } = user.response;
+            res.status(user.statusCode).send({ status, message });
+        } catch (e) {
+            logger.error(e);
+            res.status(httpStatus.BAD_GATEWAY).send(e);
+        }
+    }
+
     remove = async (req, res) => {
         try {
             const { response } = await this.userService.removeUser(req.params.uuid);
