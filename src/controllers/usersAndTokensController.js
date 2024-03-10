@@ -37,6 +37,17 @@ class UsersAndTokensController {
         }
     };
 
+    get = async (req, res) => {
+        try {
+            const user = await this.userService.getUser(req.params.uuid);
+            const { message, data } = user.response;
+            res.status(user.statusCode).send({message, data});
+        } catch(e) {
+            logger.error(e);
+            res.status(httpStatus.BAD_GATEWAY).send(e);
+        }
+    }
+
     list = async (req, res) => {
         try {
             const users = await this.userService.listUsers();
@@ -141,6 +152,7 @@ class UsersAndTokensController {
                 throw new ApiError(httpStatus.NOT_FOUND, 'User Not Found.');
             }
             const resetPasswordToken = await this.tokenService.generateResetPasswordToken(user);
+            console.log(`Token ${resetPasswordToken}`);
             EmailHelper.sendEmail(
                 EmailHelper.prepareResetPasswordVerificationMailOptions(user, resetPasswordToken),
             );

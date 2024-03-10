@@ -49,9 +49,21 @@ class UserService {
         }
     };
 
+    getUser = async (uuid) => {
+        try {
+            const user = await this.userDao.findOneByWhere({ uuid }, { exclude: ['id', 'password'] });
+            if (!user) {
+                throw new Error();
+            }
+            return responseHandler.returnSuccess(httpStatus.OK, 'User Found', user.toJSON());
+        } catch (e) {
+            return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not find user`)
+        }
+    }
+
     listUsers = async () => {
         try {
-            const users = await this.userDao.findByWhere({ status: UserStatus.ENABLED, }, { exclude: ['id', 'password'] });
+            const users = await this.userDao.findByWhere({}, { exclude: ['id', 'password'] });
             if (!users) {
                 throw new Error();
             }

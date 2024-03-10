@@ -5,7 +5,7 @@ const baseOrderSchema = Object.freeze({
     work_description: Joi.string(),
     size_page: Joi.string(),
     unit_pieces: Joi.number(),
-    paper_description: Joi.number(),
+    paper_description: Joi.string(),
     rim_sheet: Joi.string(),
     plate_ctp_description: Joi.string(),
     ink_description: Joi.string(),
@@ -14,16 +14,12 @@ const baseOrderSchema = Object.freeze({
     normal_lamination: Joi.string().valid(...Object.values(LaminationType)),
     machine_type: Joi.string().valid(...Object.values(MachineType)),
     unit_price: Joi.number(),
-    total_price: Joi.number(),
     advanced_payment: Joi.string(),
-    due_payment: Joi.string(),
-    total_payment: Joi.string(),
+    total_payment: Joi.number().required(),
     delivery_date: Joi.date(),
     remarks: Joi.string(),
     payment_status: Joi.string().valid(...Object.values(PaymentType)),
     order_status: Joi.string().valid(...Object.values(OrderStatus)),
-    due_payment_date: Joi.date(),
-    order_delivery_date: Joi.date(),
 });
 
 const createOrder = Joi.object({

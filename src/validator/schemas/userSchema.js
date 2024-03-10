@@ -13,7 +13,11 @@ const updateUser = Joi.object({
     name: Joi.string(),
     role: Joi.string().valid(...Object.values(UserRoles)),
     status: Joi.string().valid(...Object.values(UserStatus)),
-})
+    email: Joi.string().email(),
+    image: Joi.string(),
+    address: Joi.string(),
+    phone_number: Joi.string(),
+});
 
 const userLogin = Joi.object({
     email: Joi.string().email().required(),

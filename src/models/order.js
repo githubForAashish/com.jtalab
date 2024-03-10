@@ -33,9 +33,7 @@ module.exports = (sequelize, DataTypes) => {
                 values: Object.values(MachineType),
             },
             unit_price: DataTypes.FLOAT,
-            total_price: DataTypes.FLOAT,
             advanced_payment: DataTypes.FLOAT,
-            due_payment: DataTypes.FLOAT,
             total_payment: DataTypes.FLOAT,
             delivery_date: DataTypes.DATE,
             remarks: DataTypes.STRING,
@@ -47,8 +45,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.ENUM,
                 values: Object.values(OrderStatus),
             },
-            due_payment_date: DataTypes.DATE,
-            order_delivery_date: DataTypes.DATE,
         },
         {
             sequelize,

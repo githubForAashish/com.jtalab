@@ -10,9 +10,13 @@ const createCustomer = Joi.object({
 });
 
 const updateCustomer = Joi.object({
+    company_name: Joi.string(),
     phone_number: Joi.string().max(10),
     address: Joi.string(),
     contact_person: Joi.string(),
+    pan: Joi.string(),
+    email: Joi.string().email(),
+    blacklisted: Joi.boolean(),
 });
 
 module.exports = {

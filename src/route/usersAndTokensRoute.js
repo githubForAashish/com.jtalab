@@ -48,7 +48,7 @@ router.post('/register', isAuthenticated(), isAuthorized(UserRoles.ADMIN), valid
  * /usersAndTokens/users:
  *   get:
  *     summary: Fetch all users
- *     description: Fetch all active users
+ *     description: Fetch all users
  *     tags:
  *       - Users and Tokens
  *     security:
@@ -64,6 +64,29 @@ router.get('/users', isAuthenticated(), isAuthenticated(UserRoles.ADMIN, UserRol
 /**
  * @swagger
  * /usersAndTokens/{uuid}:
+ *   get:
+ *     summary: Get user by uuid
+ *     description: Get user by uuid
+ *     parameters:
+ *       - in: path
+ *         name: uuid
+ *         required: true
+ *         schema:
+ *           type: uuid
+ *     tags:
+ *       - Users and Tokens
+ *     security:
+ *       - apiKey: []
+ *     responses:
+ *       xxx:
+ *         $ref: '#/components/responses/xxx'
+ *
+ */
+router.get('/:uuid', isAuthenticated(), isAuthenticated(UserRoles.ADMIN, UserRoles.STAFF), authController.get);
+
+/**
+ * @swagger
+ * /usersAndTokens/{uuid}:
  *   patch:
  *     summary: Update an existing user
  *     tags:
@@ -71,6 +94,7 @@ router.get('/users', isAuthenticated(), isAuthenticated(UserRoles.ADMIN, UserRol
  *     parameters:
  *       - in: path
  *         name: uuid
+ *         required: true
  *         schema:
  *           type: uuid
  *     security:
@@ -97,6 +121,7 @@ router.patch('/:uuid', isAuthenticated(), isAuthorized(UserRoles.ADMIN), validat
  *     parameters:
  *       - in: path
  *         name: uuid
+ *         required: true
  *         schema:
  *           type: uuid
  *     description: User uuid to remove
