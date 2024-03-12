@@ -55,6 +55,22 @@ router.get('/list/:customerUUID', isAuthenticated(), isAuthorized(UserRoles.ADMI
 
 /**
  * @swagger
+ * /orders/list:
+ *   get:
+ *     summary: Fetch all orders
+ *     tags:
+ *       - Orders
+ *     security:
+ *       - apiKey: []
+ *     responses:
+ *       xxx:
+ *         $ref: '#/components/responses/xxx'
+ *
+ */
+router.get('/list', isAuthenticated(), isAuthorized(UserRoles.ADMIN, UserRoles.STAFF), orderController.listAll);
+
+/**
+ * @swagger
  * /orders/{uuid}:
  *   patch:
  *     summary: Update an existing order

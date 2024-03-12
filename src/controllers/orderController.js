@@ -41,6 +41,17 @@ class OrderController {
         }
     }
 
+    listAll = async (req, res) => {
+        try {
+            const orders = await this.orderService.listAllOrders(req.params.customerUUID);
+            const { status, message, data } = orders.response;
+            res.status(orders.statusCode).send({ status, message, data });
+        } catch (e) {
+            logger.error(e);
+            res.status(httpStatus.BAD_GATEWAY).send(e);
+        }
+    }
+
     remove = async (req, res) => {
         try {
             const { response } = await this.orderService.removeOrder(req.params.uuid);

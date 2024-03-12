@@ -7,6 +7,8 @@ const createUser = Joi.object({
     password: Joi.string().min(8).required(),
     name: Joi.string(),
     role: Joi.string().valid(...Object.values(UserRoles)).default(UserRoles.STAFF),
+    address: Joi.string(),
+    phone_number: Joi.string(),
 });
 
 const updateUser = Joi.object({

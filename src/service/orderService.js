@@ -70,6 +70,16 @@ class OrderService {
         }
     }
 
+    listAllOrders = async () => {
+        try {
+            const orders = await this.orderDao.findByWhere({}, { exclude: ['id'] });
+            return responseHandler.returnSuccess(httpStatus.OK, `All available orders`, orders.map((order) => order.toJSON()));
+        } catch (e) {
+            logger.error(e);
+            return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not fetch orders.`)
+        }
+    }
+
     getOrder = async (uuid) => {
         try {
             const order = await this.orderDao.findOneByWhere({ uuid, order_status: { [Op.ne]: OrderStatus.CANCELED } }, { exclude: ['id'] });

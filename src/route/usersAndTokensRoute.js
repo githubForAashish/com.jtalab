@@ -70,7 +70,6 @@ router.get('/users', isAuthenticated(), isAuthenticated(UserRoles.ADMIN, UserRol
  *     parameters:
  *       - in: path
  *         name: uuid
- *         required: true
  *         schema:
  *           type: uuid
  *     tags:
@@ -94,7 +93,6 @@ router.get('/:uuid', isAuthenticated(), isAuthenticated(UserRoles.ADMIN, UserRol
  *     parameters:
  *       - in: path
  *         name: uuid
- *         required: true
  *         schema:
  *           type: uuid
  *     security:
@@ -121,7 +119,6 @@ router.patch('/:uuid', isAuthenticated(), isAuthorized(UserRoles.ADMIN), validat
  *     parameters:
  *       - in: path
  *         name: uuid
- *         required: true
  *         schema:
  *           type: uuid
  *     description: User uuid to remove
