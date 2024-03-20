@@ -1,6 +1,7 @@
 const { CustomerStatus } = require("../config/constant");
 const SuperDao = require("./superDao");
 const models = require('../models');
+const { Op } = require("sequelize");
 
 
 class CustomerDao extends SuperDao {
@@ -10,16 +11,40 @@ class CustomerDao extends SuperDao {
 
 
     async findAllBlacklisted() {
-        return this.findByWhere({
-            where: { blacklisted: false, status: CustomerStatus.DISABLED }
-        }
-        )
+        return this.findByWhere(
+            { blacklisted: true, }
+        );
+    }
+
+    async listAllDisabled() {
+        return this.findByWhere(
+            { status: CustomerStatus.DISABLED, }
+        );
+    }
+
+    async findByUuid(uuid) {
+        return this.findOneByWhere(
+            { uuid, status: { [Op.ne]: CustomerStatus.INACTIVE } },
+            { exclude: ['id', 'blacklisted'] },
+        );
+    }
+
+    async listAllCustomers() {
+        return this.findByWhere(
+            {
+                status: { [Op.notIn]: [CustomerStatus.INACTIVE, CustomerStatus.DISABLED] },
+                blacklisted: { [Op.or]: [false, null] },
+            },
+            {
+                exclude: ['id', 'blacklisted'],
+            }
+        );
     }
 
     async isEmailExists(email) {
-        return this.Model.count({
-            where: { email, status: CustomerStatus.ACTIVE },
-        }).then((count) => {
+        return this.Model.count(
+            { email, status: { [Op.ne]: CustomerStatus.INACTIVE } },
+        ).then((count) => {
             if (count !== 0) {
                 return true;
             }
@@ -28,10 +53,10 @@ class CustomerDao extends SuperDao {
     }
 
     async isPanExists(pan) {
-        return this.Model.count({
-            where: { pan, status: CustomerStatus.ACTIVE },
-        }).then((count) => {
-            if (count !==0) {
+        return this.Model.count(
+            { pan, status: { [Op.ne]: CustomerStatus.INACTIVE } },
+        ).then((count) => {
+            if (count !== 0) {
                 return true;
             }
             return false;

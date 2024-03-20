@@ -51,7 +51,7 @@ router.post('/register', isAuthenticated(), isAuthorized(UserRoles.ADMIN, UserRo
  *         $ref: '#/components/responses/xxx'
  *
  */
-router.get('/list/:customerUUID', isAuthenticated(), isAuthorized(UserRoles.ADMIN, UserRoles.STAFF), orderController.list);
+router.get('/list/:customerUUID', isAuthenticated(), isAuthorized(UserRoles.ADMIN, UserRoles.STAFF), orderController.listAllOrdersByCustomer);
 
 /**
  * @swagger
@@ -67,7 +67,7 @@ router.get('/list/:customerUUID', isAuthenticated(), isAuthorized(UserRoles.ADMI
  *         $ref: '#/components/responses/xxx'
  *
  */
-router.get('/list', isAuthenticated(), isAuthorized(UserRoles.ADMIN, UserRoles.STAFF), orderController.listAll);
+router.get('/list', isAuthenticated(), isAuthorized(UserRoles.ADMIN, UserRoles.STAFF), orderController.listAllOrders);
 
 /**
  * @swagger

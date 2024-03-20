@@ -3,8 +3,6 @@ const { CustomerStatus } = require("../config/constant");
 const CustomerDao = require("../dao/customerDao");
 const responseHandler = require('../helper/responseHandler');
 const logger = require("../config/logger");
-const { Op } = require("sequelize");
-
 
 class CustomerService {
     constructor() {
@@ -65,7 +63,7 @@ class CustomerService {
         try {
             const updated = await this.customerDao.deleteByUuid(uuid);
             if (!updated) {
-                return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not dlete the customer. UUID: ${uuid}`);
+                return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not delete the customer. UUID: ${uuid}`);
             }
             return responseHandler.returnSuccess(httpStatus.NO_CONTENT, `Customer UUID: ${uuid} has been deleted.`);
         } catch (e) {
@@ -76,7 +74,7 @@ class CustomerService {
 
     listCustomers = async () => {
         try {
-            const customers = await this.customerDao.findByWhere({ status: CustomerStatus.ACTIVE, blacklisted: { [Op.or]: [false, null] } }, { exclude: ['id', 'blacklisted'] });
+            const customers = await this.customerDao.listAllCustomers();
             if (!customers) {
                 return responseHandler.returnError(httpStatus.INTERNAL_SERVER_ERROR, `Could not fetch customers.`)
             }
@@ -89,7 +87,7 @@ class CustomerService {
 
     getCustomer = async (uuid) => {
         try {
-            const customer = await this.customerDao.findOneByWhere({ uuid, status: CustomerStatus.ACTIVE }, { exclude: ['id', 'blacklisted'] });
+            const customer = await this.customerDao.findByUuid(uuid);
             if (!customer) {
                 return responseHandler.returnError(httpStatus.NOT_FOUND, `The customer does not exist.`);
             }

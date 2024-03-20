@@ -3,7 +3,6 @@ const { OrderStatus } = require("../config/constant");
 const logger = require("../config/logger");
 const OrderDao = require("../dao/orderDao");
 const responseHandler = require('../helper/responseHandler');
-const { Op } = require("sequelize");
 
 class OrderService {
     constructor() {
@@ -35,7 +34,7 @@ class OrderService {
     updateOrder = async (orderBody, uuid) => {
         let message = 'Successfully updated order.'
         try {
-            if (!await this.orderDao.updateWhere(orderBody, { uuid })) {
+            if (!await this.orderDao.updateOrderByUuid(orderBody, uuid)) {
                 message = 'Order update failed!';
                 return responseHandler.returnError(httpStatus.SERVICE_UNAVAILABLE, message);
             }
@@ -60,9 +59,9 @@ class OrderService {
         }
     }
 
-    listOrder = async (customer_uuid) => {
+    listAllOrdersByCustomer = async (customer_uuid) => {
         try {
-            const orders = await this.orderDao.findByWhere({ order_status: { [Op.ne]: OrderStatus.CANCELED }, customer_uuid }, { exclude: ['id'] });
+            const orders = await this.orderDao.listAllOrdersByCustomer();
             return responseHandler.returnSuccess(httpStatus.OK, `Available Orders for customer uuid: ${customer_uuid}`, orders.map((order) => order.toJSON()));
         } catch (e) {
             logger.error(e);
@@ -72,7 +71,7 @@ class OrderService {
 
     listAllOrders = async () => {
         try {
-            const orders = await this.orderDao.findByWhere({}, { exclude: ['id'] });
+            const orders = await this.orderDao.listAllOrders();
             return responseHandler.returnSuccess(httpStatus.OK, `All available orders`, orders.map((order) => order.toJSON()));
         } catch (e) {
             logger.error(e);
@@ -82,7 +81,7 @@ class OrderService {
 
     getOrder = async (uuid) => {
         try {
-            const order = await this.orderDao.findOneByWhere({ uuid, order_status: { [Op.ne]: OrderStatus.CANCELED } }, { exclude: ['id'] });
+            const order = await this.orderDao.getOrderByUuid(uuid);
             if (!order) {
                 return responseHandler.returnError(httpStatus.NOT_FOUND, `The order does not exist.`);
             }

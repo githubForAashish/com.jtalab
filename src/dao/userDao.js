@@ -33,7 +33,7 @@ class UserDao extends SuperDao {
     }
 
     async deleteByUuid(uuid) {
-        return this.updateWhere({ status: UserStatus.DISABLED }, { uuid });
+        return this.deleteByWhere({ uuid });
     }
 
 }

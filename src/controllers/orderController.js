@@ -30,9 +30,9 @@ class OrderController {
         }
     }
 
-    list = async (req, res) => {
+    listAllOrdersByCustomer = async (req, res) => {
         try {
-            const orders = await this.orderService.listOrder(req.params.customerUUID);
+            const orders = await this.orderService.listAllOrdersByCustomer(req.params.customerUUID);
             const { status, message, data } = orders.response;
             res.status(orders.statusCode).send({ status, message, data });
         } catch (e) {
@@ -41,7 +41,7 @@ class OrderController {
         }
     }
 
-    listAll = async (req, res) => {
+    listAllOrders = async (req, res) => {
         try {
             const orders = await this.orderService.listAllOrders(req.params.customerUUID);
             const { status, message, data } = orders.response;

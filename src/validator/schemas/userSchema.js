@@ -7,18 +7,17 @@ const createUser = Joi.object({
     password: Joi.string().min(8).required(),
     name: Joi.string(),
     role: Joi.string().valid(...Object.values(UserRoles)).default(UserRoles.STAFF),
-    address: Joi.string(),
-    phone_number: Joi.string(),
+    address: Joi.string().allow(null),
+    phone_number: Joi.string().allow(null),
 });
 
 const updateUser = Joi.object({
-    name: Joi.string(),
+    name: Joi.string().allow(null),
     role: Joi.string().valid(...Object.values(UserRoles)),
     status: Joi.string().valid(...Object.values(UserStatus)),
-    email: Joi.string().email(),
-    image: Joi.string(),
-    address: Joi.string(),
-    phone_number: Joi.string(),
+    image: Joi.string().allow(null),
+    address: Joi.string().allow(null),
+    phone_number: Joi.string().allow(null),
 });
 
 const userLogin = Joi.object({
