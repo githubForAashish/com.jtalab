@@ -17,9 +17,9 @@ class CustomerService {
     createCustomer = async (customerBody) => {
         try {
             let message = 'Successfully registered the customer.';
-            if (await this.customerDao.isEmailExists(customerBody.email)) {
+            if (customerBody.email && await this.customerDao.isEmailExists(customerBody.email)) {
                 return responseHandler.returnError(httpStatus.BAD_REQUEST, 'Email already taken');
-            } else if (await this.customerDao.isPanExists(customerBody.pan)) {
+            } else if (customerBody.pand && await this.customerDao.isPanExists(customerBody.pan)) {
                 return responseHandler.returnError(httpStatus.BAD_REQUEST, 'PAN number already exists.')
             }
 
