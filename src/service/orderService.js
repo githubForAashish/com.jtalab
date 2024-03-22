@@ -61,7 +61,7 @@ class OrderService {
 
     listAllOrdersByCustomer = async (customer_uuid) => {
         try {
-            const orders = await this.orderDao.listAllOrdersByCustomer();
+            const orders = await this.orderDao.listAllOrdersByCustomer(customer_uuid);
             return responseHandler.returnSuccess(httpStatus.OK, `Available Orders for customer uuid: ${customer_uuid}`, orders.map((order) => order.toJSON()));
         } catch (e) {
             logger.error(e);

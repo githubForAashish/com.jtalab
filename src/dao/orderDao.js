@@ -12,8 +12,8 @@ class OrderDao extends SuperDao {
         return this.updateWhere({ order_status: OrderStatus.CANCELED }, { uuid });
     }
 
-    async listAllOrdersByCustomer() {
-        return this.findByWhere({ order_status }, { exclude: ['id'] });;
+    async listAllOrdersByCustomer(customer_uuid) {
+        return this.findByWhere({ customer_uuid }, { exclude: ['id'] });;
     }
 
     async listAllOrders() {
