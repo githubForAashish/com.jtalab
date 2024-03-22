@@ -19,7 +19,8 @@ class CustomerService {
             let message = 'Successfully registered the customer.';
             if (customerBody.email && await this.customerDao.isEmailExists(customerBody.email)) {
                 return responseHandler.returnError(httpStatus.BAD_REQUEST, 'Email already taken');
-            } else if (customerBody.pand && await this.customerDao.isPanExists(customerBody.pan)) {
+            } 
+            if (customerBody.pan && await this.customerDao.isPanExists(customerBody.pan)) {
                 return responseHandler.returnError(httpStatus.BAD_REQUEST, 'PAN number already exists.')
             }
 

@@ -42,9 +42,12 @@ class CustomerDao extends SuperDao {
     }
 
     async isEmailExists(email) {
-        return this.Model.count(
-            { email, status: { [Op.ne]: CustomerStatus.INACTIVE } },
-        ).then((count) => {
+        return this.Model.count({
+            where: {
+                email,
+                status: { [Op.ne]: CustomerStatus.INACTIVE }
+            },
+        }).then((count) => {
             if (count !== 0) {
                 return true;
             }
@@ -53,9 +56,12 @@ class CustomerDao extends SuperDao {
     }
 
     async isPanExists(pan) {
-        return this.Model.count(
-            { pan, status: { [Op.ne]: CustomerStatus.INACTIVE } },
-        ).then((count) => {
+        return this.Model.count({
+            where: {
+                pan,
+                status: { [Op.ne]: CustomerStatus.INACTIVE }
+            },
+        }).then((count) => {
             if (count !== 0) {
                 return true;
             }

@@ -5,7 +5,7 @@ const { UserStatus } = require('../../config/constant');
 const createUser = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
-    name: Joi.string(),
+    name: Joi.string().allow(null),
     role: Joi.string().valid(...Object.values(UserRoles)).default(UserRoles.STAFF),
     address: Joi.string().allow(null),
     phone_number: Joi.string().allow(null),

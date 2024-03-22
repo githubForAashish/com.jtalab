@@ -25,7 +25,8 @@ class OrderDao extends SuperDao {
     }
 
     async updateOrderByUuid(orderBody, uuid) {
-        if(!await this.findOneByWhere({ uuid, order_status: {[Op.ne]: OrderStatus.CANCELED} })) {
+        const existingOrder = await this.findOneByWhere({uuid});
+        if(existingOrder && existingOrder.order_status !== OrderStatus.CANCELED) {
             return this.updateWhere(orderBody, { uuid });
         }
     }
