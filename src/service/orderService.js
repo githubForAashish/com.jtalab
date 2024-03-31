@@ -69,9 +69,13 @@ class OrderService {
         }
     }
 
-    listAllOrders = async () => {
+    listAllOrders = async (expand=false) => {
         try {
-            const orders = await this.orderDao.listAllOrders();
+            let orders = []
+            if(!expand)
+                orders = await this.orderDao.listAllOrders();
+            else
+                orders = await this.orderDao.listAllOrdersIncludingCustomers();
             return responseHandler.returnSuccess(httpStatus.OK, `All available orders`, orders.map((order) => order.toJSON()));
         } catch (e) {
             logger.error(e);

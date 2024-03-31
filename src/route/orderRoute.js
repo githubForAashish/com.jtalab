@@ -60,6 +60,12 @@ router.get('/list/:customerUUID', isAuthenticated(), isAuthorized(UserRoles.ADMI
  *     summary: Fetch all orders
  *     tags:
  *       - Orders
+ *     parameters:
+ *       - in: query
+ *         name: expand
+ *         schema:
+ *           type: boolean
+ *           description: Should return customer info as well or not.
  *     security:
  *       - apiKey: []
  *     responses:

@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
     class Order extends Model {
         static associate(models) {
-            Order.belongsTo(models.Customer, { foreignKey: 'customer_uuid' });
+            Order.belongsTo(models.Customer, { foreignKey: 'customer_uuid', targetKey: 'uuid', as: 'customer' });
         }
     }
     Order.init(

@@ -4,7 +4,7 @@ const { TokenTypes } = require('../config/tokens');
 module.exports = (sequelize, DataTypes) => {
     class Token extends Model {
         static associate(models) {
-            Token.belongsTo(models.User, { foreignKey: 'user_uuid' });
+            Token.belongsTo(models.User, { foreignKey: 'user_uuid', targetKey: 'uuid' });
         }
     }
     Token.init(

@@ -43,7 +43,7 @@ class OrderController {
 
     listAllOrders = async (req, res) => {
         try {
-            const orders = await this.orderService.listAllOrders(req.params.customerUUID);
+            const orders = await this.orderService.listAllOrders(req.query.expand ?? false);
             const { status, message, data } = orders.response;
             res.status(orders.statusCode).send({ status, message, data });
         } catch (e) {
