@@ -42,8 +42,9 @@ class OrderController {
     }
 
     listAllOrders = async (req, res) => {
+        const shouldExpand = req.query.expand && req.query.expand !== 'false'
         try {
-            const orders = await this.orderService.listAllOrders(req.query.expand ?? false);
+            const orders = await this.orderService.listAllOrders(shouldExpand);
             const { status, message, data } = orders.response;
             res.status(orders.statusCode).send({ status, message, data });
         } catch (e) {
